@@ -41,6 +41,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import axios from 'axios'
+import { Notify } from 'quasar'
 
 const email = ref('')
 const successMessage = ref('')
@@ -48,21 +49,35 @@ const errorMessage = ref('')
 
 // Fonction qui s'exécute lors du clic sur un bouton et envoie les données
 const handleSubmit = async (buttonContent: string) => {
-  console.log('Email:', email.value)
-  console.log('Content:', buttonContent) // Utilise la valeur de content définie par le bouton cliqué
-
   try {
     const response = await axios.post('https://api.bforestdev.fr/files/write', {
       email: email.value,
       content: buttonContent, // Envoi du contenu (texte)
     })
 
-    if (response.status === 200) {
+    if (response.status === 201 || response.status === 200) {
+      // Notification de succès
+      Notify.create({
+        message: 'Email et contenu envoyés avec succès !',
+        color: 'green', // Couleur verte pour le succès
+        position: 'top', // Positionnement de la notification
+        timeout: 3000, // Durée avant que la notification disparaisse
+      })
+
       successMessage.value = 'Email et contenu envoyés avec succès !'
       email.value = '' // Vide le champ email après l'envoi
     }
   } catch (error) {
     console.error("Erreur lors de l'envoi :", error)
+
+    // Notification d'erreur
+    Notify.create({
+      message: "Une erreur est survenue lors de l'envoi.",
+      color: 'red', // Couleur rouge pour l'erreur
+      position: 'top',
+      timeout: 3000,
+    })
+
     errorMessage.value = "Une erreur est survenue lors de l'envoi."
   }
 }
