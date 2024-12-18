@@ -8,10 +8,20 @@
         assurer le bien-être de l’animal et la satisfaction des adoptants.
       </p>
       <form @submit.prevent="handleSubmit" class="form">
-        <input type="email" placeholder="Votre email" class="email-input" required />
+        <input
+          type="email"
+          placeholder="Votre email"
+          v-model="email"
+          class="email-input"
+          required
+        />
         <div class="buttons">
-          <button type="button" class="btn btn-association">Je suis une association</button>
-          <button type="button" class="btn btn-adopter">Je souhaite adopter dans le futur</button>
+          <button type="button" class="btn btn-association" @click="handleSubmit()">
+            Je suis une association
+          </button>
+          <button type="button" class="btn btn-adopter" @click="handleSubmit()">
+            Je souhaite adopter dans le futur
+          </button>
         </div>
       </form>
       <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
@@ -27,6 +37,7 @@ const email = ref('')
 const successMessage = ref('')
 
 const handleSubmit = async () => {
+  console.log('Email:', email.value)
   try {
     const response = await axios.post('http://localhost:3000/submit', { email: email.value })
     if (response.status === 200) {
