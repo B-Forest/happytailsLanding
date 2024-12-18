@@ -7,7 +7,8 @@
         personnalisé, renforcé par un suivi fiable et proactif des professionnels de la SPA, pour
         assurer le bien-être de l’animal et la satisfaction des adoptants.
       </p>
-      <form @submit.prevent="handleSubmit" class="form">
+      <!-- Retirer l'@submit.prevent et appeler handleSubmit directement depuis les boutons -->
+      <form class="form">
         <input
           type="email"
           placeholder="Votre email"
@@ -16,10 +17,18 @@
           required
         />
         <div class="buttons">
-          <button type="button" class="btn btn-association" @click="handleSubmit()">
+          <button
+            type="button"
+            class="btn btn-association"
+            @click="handleSubmit('Je suis une association')"
+          >
             Je suis une association
           </button>
-          <button type="button" class="btn btn-adopter" @click="handleSubmit()">
+          <button
+            type="button"
+            class="btn btn-adopter"
+            @click="handleSubmit('Je souhaite adopter dans le futur')"
+          >
             Je souhaite adopter dans le futur
           </button>
         </div>
@@ -35,17 +44,26 @@ import axios from 'axios'
 
 const email = ref('')
 const successMessage = ref('')
+const errorMessage = ref('')
 
-const handleSubmit = async () => {
+// Fonction qui s'exécute lors du clic sur un bouton et envoie les données
+const handleSubmit = async (buttonContent: string) => {
   console.log('Email:', email.value)
+  console.log('Content:', buttonContent) // Utilise la valeur de content définie par le bouton cliqué
+
   try {
-    const response = await axios.post('http://localhost:3000/submit', { email: email.value })
+    const response = await axios.post('https://api.bforestdev.fr/files/write', {
+      email: email.value,
+      content: buttonContent, // Envoi du contenu (texte)
+    })
+
     if (response.status === 200) {
-      successMessage.value = 'Email envoyé avec succès !'
-      email.value = '' // Vide le champ après l'envoi
+      successMessage.value = 'Email et contenu envoyés avec succès !'
+      email.value = '' // Vide le champ email après l'envoi
     }
   } catch (error) {
     console.error("Erreur lors de l'envoi :", error)
+    errorMessage.value = "Une erreur est survenue lors de l'envoi."
   }
 }
 </script>
