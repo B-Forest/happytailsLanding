@@ -6,7 +6,7 @@
       <!-- Toggle -->
       <div class="toggle">
         <button :class="{ active: userType === 'asso' }" @click="userType = 'asso'">
-          🏢 Je suis une association
+          🏢 Je propose l'adoption
         </button>
         <button :class="{ active: userType === 'adoptant' }" @click="userType = 'adoptant'">
           🐶 Je suis un adoptant
