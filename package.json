@@ -1,7 +1,7 @@
 {
   "name": "happytails",
   "version": "0.0.1",
-  "description": "A Quasar Project",
+  "description": "Landing Page pour une application de gestion d'adoption d'animaux.",
   "productName": "Happy Tails App",
   "author": "FOREST Benjamin <benjamin.frt28@gmail.com>",
   "type": "module",
