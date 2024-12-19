@@ -1,7 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <q-header elevated class="q-m-none">
-      <q-toolbar>
+      <q-toolbar style="background-color: #f5c02f">
         <q-toolbar-title class="q-m-none">Happy Tails</q-toolbar-title>
       </q-toolbar>
     </q-header>

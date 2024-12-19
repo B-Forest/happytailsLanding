@@ -1,39 +1,43 @@
 <template>
   <div class="background">
     <div class="content">
-      <h1>Happy Tails</h1>
+      <h1>🐾 Happy Tails</h1>
       <p>
         Garantissez une adoption réussie et durable grâce à un accompagnement interactif et
         personnalisé, renforcé par un suivi fiable et proactif des professionnels de la SPA, pour
         assurer le bien-être de l’animal et la satisfaction des adoptants.
       </p>
-      <!-- Retirer l'@submit.prevent et appeler handleSubmit directement depuis les boutons -->
       <form class="form">
-        <input
-          type="email"
-          placeholder="Votre email"
-          v-model="email"
-          class="email-input"
-          required
-        />
+        <div class="input-wrapper">
+          <input
+            type="email"
+            placeholder="Votre email"
+            v-model="email"
+            class="email-input"
+            required
+          />
+          <i class="icon fa fa-envelope"></i>
+        </div>
         <div class="buttons">
           <button
             type="button"
             class="btn btn-association"
             @click="handleSubmit('Je suis une association')"
           >
-            Je suis une association
+            🏢 Je suis une association
           </button>
           <button
             type="button"
             class="btn btn-adopter"
             @click="handleSubmit('Je souhaite adopter dans le futur')"
           >
-            Je souhaite adopter dans le futur
+            🐶 Je souhaite adopter dans le futur
           </button>
         </div>
       </form>
-      <p v-if="successMessage" class="success-message">{{ successMessage }}</p>
+      <p v-if="successMessage" class="success-message">
+        <i class="icon fa fa-check-circle"></i> {{ successMessage }}
+      </p>
     </div>
   </div>
 </template>
@@ -84,19 +88,23 @@ const handleSubmit = async (buttonContent: string) => {
 </script>
 
 <style lang="scss">
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
 .background {
   position: relative;
   height: 100vh;
   display: flex;
   justify-content: center;
-  align-items: start;
-  color: black;
+  align-items: center;
   text-align: center;
-  padding: 10rem;
+  padding: 4rem 2rem;
+  font-family: 'Poppins', sans-serif;
+  color: black;
 
   &::before {
     content: '';
-    background-image: url('/pictures/bg_picture.jpg');
+    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+      url('/pictures/bg_picture.jpg');
     background-size: cover;
     background-position: center;
     position: absolute;
@@ -104,73 +112,121 @@ const handleSubmit = async (buttonContent: string) => {
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.5;
     z-index: -1;
   }
 }
 
 .content {
-  position: relative;
-  z-index: 1;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  max-width: 600px;
+
+  h1 {
+    font-size: 2.8rem;
+    margin-bottom: 1rem;
+    color: #ff6f61;
+    font-weight: 600;
+  }
 
   p {
-    margin-bottom: 20px;
     font-size: 1.2rem;
-    font-weight: 500;
-    color: #333;
-    padding: 0 10rem;
+    margin-bottom: 1.5rem;
+    color: #555;
+    line-height: 1.6;
   }
-}
 
-h1 {
-  margin-bottom: 20px;
-  font-size: 3rem;
-  color: #333;
-}
+  .form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1.5rem;
 
-.form {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-}
+    .input-wrapper {
+      position: relative;
+      width: 100%;
+      max-width: 400px;
 
-.email-input {
-  padding: 10px 15px;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  width: 300px;
-  outline: none;
-}
+      .email-input {
+        width: 100%;
+        padding: 0.8rem 3rem 0.8rem 1rem;
+        font-size: 1rem;
+        border: 2px solid #ccc;
+        border-radius: 25px;
+        outline: none;
+        transition: border-color 0.3s ease;
 
-.buttons {
-  display: flex;
-  gap: 10px;
-}
+        &:focus {
+          border-color: #ff6f61;
+        }
+      }
 
-.btn {
-  padding: 10px 20px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  color: white;
-  transition: background 0.3s ease;
+      .icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 1.2rem;
+        color: #ff6f61;
+      }
+    }
 
-  &.btn-association {
-    background-color: #007bff;
+    .buttons {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
 
-    &:hover {
-      background-color: #0056b3;
+      .btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.5rem;
+        padding: 0.8rem 1.5rem;
+        font-size: 1rem;
+        font-weight: bold;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        color: white;
+        transition:
+          background-color 0.3s ease,
+          transform 0.2s ease;
+
+        &:hover {
+          transform: scale(1.05);
+        }
+
+        &.btn-association {
+          background-color: #ff6f61;
+
+          &:hover {
+            background-color: #e65b50;
+          }
+        }
+
+        &.btn-adopter {
+          background-color: #ffcc00;
+
+          &:hover {
+            background-color: #e6b800;
+          }
+        }
+      }
     }
   }
 
-  &.btn-adopter {
-    background-color: #28a745;
+  .success-message {
+    margin-top: 1.5rem;
+    font-size: 1.1rem;
+    color: #28a745;
+    font-weight: bold;
 
-    &:hover {
-      background-color: #1e7e34;
+    .icon {
+      margin-right: 0.5rem;
     }
   }
 }
