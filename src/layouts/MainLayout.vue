@@ -29,7 +29,7 @@
 
 .demo-link {
   display: inline-block;
-  background-color: #ff9a76;
+  background-color: #d1bce3;
   color: white;
   text-decoration: none;
   font-weight: bold;
@@ -43,12 +43,12 @@
 }
 
 .demo-link:hover {
-  background-color: #ff7f5e; /* Slightly darker shade for hover */
-  transform: translateY(-2px); /* Lift effect on hover */
+  background-color: #c0aad8;
+  transform: translateY(-2px);
 }
 
 .demo-link:active {
-  transform: translateY(1px); /* Subtle press effect */
+  transform: translateY(1px);
   box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
 }
 </style>
