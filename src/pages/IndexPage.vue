@@ -129,6 +129,10 @@ const handleSubmit = async (buttonContent: string) => {
     margin-bottom: 1rem;
     color: #ff6f61;
     font-weight: 600;
+
+    @media (max-width: 768px) {
+      font-size: 2rem;
+    }
   }
 
   p {
@@ -136,6 +140,14 @@ const handleSubmit = async (buttonContent: string) => {
     margin-bottom: 1.5rem;
     color: #555;
     line-height: 1.6;
+
+    @media (max-width: 768px) {
+      font-size: 1rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+    }
   }
 
   .form {
@@ -227,6 +239,33 @@ const handleSubmit = async (buttonContent: string) => {
 
     .icon {
       margin-right: 0.5rem;
+    }
+  }
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .content {
+    padding: 1.5rem;
+  }
+
+  .buttons .btn {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .content {
+    padding: 1rem;
+  }
+
+  .buttons {
+    flex-direction: column;
+    gap: 0.8rem;
+
+    .btn {
+      width: 100%;
     }
   }
 }
