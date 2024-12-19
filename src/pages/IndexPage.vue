@@ -51,9 +51,16 @@ const email = ref('')
 const successMessage = ref('')
 const errorMessage = ref('')
 
-// Fonction qui s'exécute lors du clic sur un bouton et envoie les données
+const validateEmail = (email: string) => {
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+  return emailRegex.test(email)
+}
 const handleSubmit = async (buttonContent: string) => {
   try {
+    if (!validateEmail(email.value)) {
+      alert('Veuillez entrer une adresse email valide.')
+      return
+    }
     const response = await axios.post('https://api.bforestdev.fr/files/write', {
       email: email.value,
       content: buttonContent, // Envoi du contenu (texte)
