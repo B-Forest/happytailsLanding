@@ -127,7 +127,7 @@ const handleSubmit = async (buttonContent: string) => {
   h1 {
     font-size: 2.8rem;
     margin-bottom: 1rem;
-    color: #ff6f61;
+    color: $primary;
     font-weight: 600;
 
     @media (max-width: 768px) {
@@ -171,7 +171,7 @@ const handleSubmit = async (buttonContent: string) => {
         transition: border-color 0.3s ease;
 
         &:focus {
-          border-color: #ff6f61;
+          border-color: $primary;
         }
       }
 
@@ -181,7 +181,7 @@ const handleSubmit = async (buttonContent: string) => {
         top: 50%;
         transform: translateY(-50%);
         font-size: 1.2rem;
-        color: #ff6f61;
+        color: $primary;
       }
     }
 
@@ -213,18 +213,18 @@ const handleSubmit = async (buttonContent: string) => {
         }
 
         &.btn-association {
-          background-color: #ff6f61;
+          background-color: $primary-second;
 
           &:hover {
-            background-color: #e65b50;
+            background-color: $primary;
           }
         }
 
         &.btn-adopter {
-          background-color: #ffcc00;
+          background-color: $secondary-second;
 
           &:hover {
-            background-color: #e6b800;
+            background-color: $secondary;
           }
         }
       }
