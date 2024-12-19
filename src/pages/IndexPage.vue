@@ -2,12 +2,24 @@
   <div class="background">
     <div class="content">
       <h1>🐾 Happy Tails</h1>
-      <p>
-        Garantissez une adoption réussie et durable grâce à un accompagnement interactif et
-        personnalisé, renforcé par un suivi fiable et proactif des professionnels de la SPA, pour
-        assurer le bien-être de l’animal et la satisfaction des adoptants.
+
+      <!-- Toggle -->
+      <div class="toggle">
+        <button :class="{ active: userType === 'asso' }" @click="userType = 'asso'">
+          🏢 Je suis une association
+        </button>
+        <button :class="{ active: userType === 'adoptant' }" @click="userType = 'adoptant'">
+          🐶 Je suis un adoptant
+        </button>
+      </div>
+
+      <!-- Dynamic Components -->
+      <component :is="activeComponent" />
+
+      <p class="little-text">
+        Si vous êtes intérrésé renseigner votre email pour que l'on puisse vous contacter
       </p>
-      <form class="form">
+      <form class="form" @submit.prevent="handleSubmit">
         <div class="input-wrapper">
           <input
             type="email"
@@ -18,23 +30,9 @@
           />
           <i class="icon fa fa-envelope"></i>
         </div>
-        <div class="buttons">
-          <button
-            type="button"
-            class="btn btn-association"
-            @click="handleSubmit('Je suis une association')"
-          >
-            🏢 Je suis une association
-          </button>
-          <button
-            type="button"
-            class="btn btn-adopter"
-            @click="handleSubmit('Je souhaite adopter dans le futur')"
-          >
-            🐶 Je souhaite adopter dans le futur
-          </button>
-        </div>
+        <button type="submit" class="btn btn-submit">Envoyer</button>
       </form>
+
       <p v-if="successMessage" class="success-message">
         <i class="icon fa fa-check-circle"></i> {{ successMessage }}
       </p>
@@ -43,53 +41,57 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, ref } from 'vue'
 import axios from 'axios'
 import { Notify } from 'quasar'
+import CardAsso from 'components/card_asso.vue'
+import CardAdopt from 'components/card_adopt.vue'
 
+// State
 const email = ref('')
+const userType = ref('asso') // "asso" or "adoptant"
 const successMessage = ref('')
-const errorMessage = ref('')
 
+const activeComponent = computed(() => (userType.value === 'asso' ? CardAsso : CardAdopt))
+
+// Form Handling
 const validateEmail = (email: string) => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
   return emailRegex.test(email)
 }
-const handleSubmit = async (buttonContent: string) => {
+
+const handleSubmit = async () => {
   try {
     if (!validateEmail(email.value)) {
       alert('Veuillez entrer une adresse email valide.')
       return
     }
+    const buttonContent =
+      userType.value === 'asso' ? "Je propose l'adoption" : 'Je suis un adoptant'
+
     const response = await axios.post('https://api.bforestdev.fr/files/write', {
       email: email.value,
-      content: buttonContent, // Envoi du contenu (texte)
+      content: buttonContent,
     })
 
     if (response.status === 201 || response.status === 200) {
-      // Notification de succès
       Notify.create({
-        message: 'Email et contenu envoyés avec succès !',
-        color: 'green', // Couleur verte pour le succès
-        position: 'top', // Positionnement de la notification
-        timeout: 3000, // Durée avant que la notification disparaisse
+        message: 'Email envoyé avec succès !',
+        color: 'green',
+        position: 'top',
+        timeout: 3000,
       })
-
-      successMessage.value = 'Email et contenu envoyés avec succès !'
-      email.value = '' // Vide le champ email après l'envoi
+      successMessage.value = 'Email envoyé avec succès !'
+      email.value = '' // Reset email field
     }
   } catch (error) {
-    console.error("Erreur lors de l'envoi :", error)
-
-    // Notification d'erreur
+    console.error("Erreur lors de l'envoi :", error) // Utilisation de la variable
     Notify.create({
       message: "Une erreur est survenue lors de l'envoi.",
-      color: 'red', // Couleur rouge pour l'erreur
+      color: 'red',
       position: 'top',
       timeout: 3000,
     })
-
-    errorMessage.value = "Une erreur est survenue lors de l'envoi."
   }
 }
 </script>
@@ -99,18 +101,23 @@ const handleSubmit = async (buttonContent: string) => {
 
 .background {
   position: relative;
-  height: 100vh;
   display: flex;
+  height: 100vh;
   justify-content: center;
-  align-items: center;
+  align-items: flex-start;
   text-align: center;
-  padding: 4rem 2rem;
+  padding: 1.5rem 2rem;
   font-family: 'Poppins', sans-serif;
   color: black;
 
   &::before {
     content: '';
-    background-image: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    background-image: linear-gradient(
+        to bottom,
+        rgba(0, 0, 0, 0.3),
+        rgba(0, 0, 0, 0.3),
+        rgb(255, 202, 155)
+      ),
       url('/pictures/bg_picture.jpg');
     background-size: cover;
     background-position: center;
@@ -123,23 +130,28 @@ const handleSubmit = async (buttonContent: string) => {
   }
 }
 
+/* Pour les tablettes */
+@media (max-width: 768px) {
+  .background {
+    height: 100%; /* Ajustez cette valeur selon vos préférences */
+  }
+}
+
 .content {
   background: rgba(255, 255, 255, 0.9);
   backdrop-filter: blur(10px);
   padding: 2rem;
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-  max-width: 600px;
+  padding-top: 0;
+  padding-bottom: 1rem;
+  min-height: 625px;
 
   h1 {
     font-size: 2.8rem;
-    margin-bottom: 1rem;
-    color: $primary;
+    margin: 1rem 0;
     font-weight: 600;
-
-    @media (max-width: 768px) {
-      font-size: 2rem;
-    }
+    color: $primary;
   }
 
   p {
@@ -147,21 +159,19 @@ const handleSubmit = async (buttonContent: string) => {
     margin-bottom: 1.5rem;
     color: #555;
     line-height: 1.6;
+  }
 
-    @media (max-width: 768px) {
-      font-size: 1rem;
-    }
-
-    @media (max-width: 480px) {
-      font-size: 0.9rem;
-    }
+  .little-text {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 1rem;
   }
 
   .form {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 1.5rem;
+    gap: 0.5rem;
 
     .input-wrapper {
       position: relative;
@@ -192,48 +202,40 @@ const handleSubmit = async (buttonContent: string) => {
       }
     }
 
-    .buttons {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: center;
-      gap: 1rem;
+    .btn-submit {
+      background-color: #28a745;
+      color: white;
+      border: none;
+      border-radius: 25px;
+      padding: 0.8rem 1.5rem;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
 
-      .btn {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
-        padding: 0.8rem 1.5rem;
-        font-size: 1rem;
-        font-weight: bold;
-        border: none;
-        border-radius: 25px;
-        cursor: pointer;
-        color: white;
-        transition:
-          background-color 0.3s ease,
-          transform 0.2s ease;
+      &:hover {
+        background-color: #218838;
+      }
+    }
+  }
 
-        &:hover {
-          transform: scale(1.05);
-        }
+  .toggle {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+    gap: 1rem;
 
-        &.btn-association {
-          background-color: $primary-second;
+    button {
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 25px;
+      font-size: 1rem;
+      cursor: pointer;
+      background-color: #ccc;
+      color: #fff;
+      transition: background-color 0.3s ease;
 
-          &:hover {
-            background-color: $primary;
-          }
-        }
-
-        &.btn-adopter {
-          background-color: $secondary-second;
-
-          &:hover {
-            background-color: $secondary;
-          }
-        }
+      &.active {
+        background-color: $primary;
       }
     }
   }
@@ -246,33 +248,6 @@ const handleSubmit = async (buttonContent: string) => {
 
     .icon {
       margin-right: 0.5rem;
-    }
-  }
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-  .content {
-    padding: 1.5rem;
-  }
-
-  .buttons .btn {
-    font-size: 0.9rem;
-    padding: 0.6rem 1.2rem;
-  }
-}
-
-@media (max-width: 480px) {
-  .content {
-    padding: 1rem;
-  }
-
-  .buttons {
-    flex-direction: column;
-    gap: 0.8rem;
-
-    .btn {
-      width: 100%;
     }
   }
 }
