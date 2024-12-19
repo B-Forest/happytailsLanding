@@ -5,11 +5,11 @@
 
       <!-- Toggle -->
       <div class="toggle">
-        <button :class="{ active: userType === 'asso' }" @click="userType = 'asso'">
-          🏢 Je propose l'adoption
-        </button>
         <button :class="{ active: userType === 'adoptant' }" @click="userType = 'adoptant'">
           🐶 Je suis un adoptant
+        </button>
+        <button :class="{ active: userType === 'asso' }" @click="userType = 'asso'">
+          🏢 Je propose l'adoption
         </button>
       </div>
 
@@ -49,10 +49,10 @@ import CardAdopt from 'components/card_adopt.vue'
 
 // State
 const email = ref('')
-const userType = ref('asso') // "asso" or "adoptant"
+const userType = ref('adoptant') // "asso" or "adoptant"
 const successMessage = ref('')
 
-const activeComponent = computed(() => (userType.value === 'asso' ? CardAsso : CardAdopt))
+const activeComponent = computed(() => (userType.value === 'adoptant' ? CardAdopt : CardAsso))
 
 // Form Handling
 const validateEmail = (email: string) => {
@@ -67,7 +67,7 @@ const handleSubmit = async () => {
       return
     }
     const buttonContent =
-      userType.value === 'asso' ? "Je propose l'adoption" : 'Je suis un adoptant'
+      userType.value === 'adoptant' ? 'Je suis un adoptant' : "Je propose l'adoption"
 
     const response = await axios.post('https://api.bforestdev.fr/files/write', {
       email: email.value,
